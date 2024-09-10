@@ -1,0 +1,29 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --host",
+    "devhttps": "nuxt dev --host --https",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@material-symbols/font-400": "^0.22.2",
+    "@material-symbols/font-600": "^0.22.2",
+    "@nuxt/fonts": "^0.7.2",
+    "@nuxt/image": "^1.8.0",
+    "@nuxt/scripts": "^0.7.1",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "nuxt": "^3.13.0",
+    "sass": "^1.78.0",
+    "sass-loader": "^16.0.1",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "sass": "^1.77.8",
+    "sass-embedded": "^1.78.0"
+  }
+}
