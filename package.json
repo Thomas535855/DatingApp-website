@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
     "build": "nuxt build",
     "dev": "nuxt dev --host",
     "devhttps": "nuxt dev --host --https",
@@ -24,7 +25,11 @@
     "vue": "latest"
   },
   "devDependencies": {
+    "@eslint/js": "^9.10.0",
+    "eslint": "^9.10.0",
+    "globals": "^15.9.0",
     "sass": "^1.77.8",
-    "sass-embedded": "^1.78.0"
+    "sass-embedded": "^1.78.0",
+    "typescript-eslint": "^8.5.0"
   }
 }
