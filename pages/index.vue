@@ -1,12 +1,16 @@
 ﻿<template>
   <div class="index-container">
-   <IndexProfile class="profile"/>
-    <IndexDescription class="description" />
+   <IndexProfile :img-url="useUser.data.value.profile_picture" :age="useUser.getAge()" :name="useUser.data.value.first_name" class="profile"/>
+   <IndexDescription class="description" />
   </div>
 </template>
 
 <script setup lang="ts">
+const useUser = UseUser();
 
+onMounted(async ()=> {
+  await useUser.init(4);
+})
 </script>
 
 <style scoped>

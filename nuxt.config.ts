@@ -27,5 +27,19 @@ export default defineNuxtConfig({
         {rel: 'icon', type: 'image/png', href: '/favicon.png'}
       ]
     }
+  },
+  runtimeConfig: {
+    // @ts-ignore
+    ENV: process.env.NUXT_ENV,
+    // @ts-ignore
+    MAIN_API_URL: process.env.NUXT_MAIN_API_URL,
+    public: {
+      // @ts-ignore
+      ENV: process.env.NUXT_PUBLIC_ENV,
+      // @ts-ignore
+      MAIN_API_URL: process.env.NUXT_PUBLIC_MAIN_API_URL,
+      // @ts-ignore
+      WEBSITE_URL: process.env.NUXT_PUBLIC_WEBSITE_URL,
+    }
   }
 })

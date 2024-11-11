@@ -1,12 +1,12 @@
 ﻿<template>
-  <div class="profile-container" style="background-image: url('https://res.cloudinary.com/dbbbshyvn/image/upload/v1706105528/staff/z6dmkjleoh0rapjlfkwl.jpg')">
+  <div class="profile-container" :style="`background-image: url(${imgUrl})`">
     <div class="swipe-indicators">
       <span><img src="../../public/icons/cross.svg" alt="swipe left or tap"/></span>
       <span><img src="../../public/icons/check.svg" alt="swipe right or tap"/></span>
     </div>
     <div class="information">
-      <h3 class="name">John Doe</h3>
-      <p class="age">24</p>
+      <h3 class="name">{{name}}</h3>
+      <p class="age">{{age}}</p>
       <div class="genres">
         <span>Rock</span>
         <span>Pop</span>
@@ -17,7 +17,24 @@
 </template>
 
 <script setup lang="ts">
+let props = defineProps({
+  imgUrl:{
+    type: String,
+    required:true
+  },
+  name:{
+    type:String,
+    required:true
+  },
+  age:{
+    type:Number,
+    required:true
+  }
+});
 
+onMounted(()=>{
+  console.log(props)
+})
 </script>
 
 <style scoped lang="scss">

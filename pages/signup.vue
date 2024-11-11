@@ -1,79 +1,115 @@
 ﻿<template>
-  <div class="signup-container">
-    <h2 class="question">{{ currentStep.question }}</h2>
-    <div class="input-fields">
-      <template v-for="(inputField, index) in currentStep.inputFields" :key="index">
-        <UIInput
-            v-model="values[step][inputField.key]"
-            :label="inputField.label"
-            :placeholder="inputField.placeholder"
-            :inputType="inputField.inputType"
-        />
-      </template>
+  <div class="signup-page">
+    <div class="modal" id="start" v-if="currentStep === 'get_started'">
+      <h2>Let's get started!</h2>
+      <button @click="goToNextStep">Start Signup</button>
     </div>
-    <UIButtonBig class="button" :action="nextStep" :content="'Continue'"/>
+    
+    <div class="modal" v-if="currentStep === 'name_and_dob'">
+      <h2>Enter your Name and Date of Birth</h2>
+      <input v-model="signupData.first_name" placeholder="First Name" />
+      <input type="date" v-model="signupData.date_of_birth" />
+      <button @click="goToNextStep">Next</button>
+    </div>
+    
+    <div class="modal" v-if="currentStep === 'verify_location'">
+      <h2>Verify your Location</h2>
+      <input v-model="signupData.location" placeholder="Location" />
+      <button @click="goToNextStep">Next</button>
+    </div>
+    
+    <div class="modal" v-if="currentStep === 'upload_picture'">
+      <h2>Upload Profile Picture</h2>
+      <input type="file" @change="handlePictureUpload" />
+      <button @click="submitSignup">Complete Signup</button>
+    </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-const step = ref(0);
+import { UseSignup } from '~/composables/UseSignup';
 
-const steps = [
-  {
-    question: "First things first, what is your name and date of birth?",
-    inputFields: [
-      { key: 'name', label: 'Name', placeholder: 'Enter your name', inputType: 'text' },
-      { key: 'dateOfBirth', label: 'Date of Birth', placeholder: 'Select your date of birth', inputType: 'date' }
-    ]
+const { signupData, currentStep, goToNextStep, goToPreviousStep, setSignupData, submitSignup } = UseSignup();
+
+async function handlePictureUpload(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) {
+    const imageUrl = await uploadImageToApi(file);
+    
+    setSignupData({ profile_picture: imageUrl });
   }
-];
+}
 
-const values = ref([
-  { name: '', dateOfBirth: '' },
-  { email: '', phone: '' }
-]);
+async function uploadImageToApi(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  const response = await fetchFromClient.post('/user/upload-image', 'main-api', {
+    body: formData
+  }) as any;
 
-const currentStep = computed(() => steps[step.value]);
-
-const nextStep = () => {
-  if (step.value < steps.length - 1) {
-    step.value++;
-  } else {
-    console.log('Form submitted', values.value);
+  if (!response.ok) {
+    throw new Error('Failed to upload image');
   }
-};
+  
+  return response._data.message.imageUrl;
+}
+
 </script>
 
-
 <style scoped lang="scss">
-.signup-container {
+.signup-page {
   display: flex;
   flex-direction: column;
-  width: 100%;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  gap: 1rem;
   padding: 1rem;
-  gap: 2.5rem;
-  flex-grow: 1;
 
-  .question {
-    font-family: "Futura Condensed Extra Bold", sans-serif;
-    font-size: 2rem;
-    text-align: center;
-    width: 80%;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-
-  .input-fields {
+  .modal {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    width: 80%;
-  }
+    gap: 2rem;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.10);
 
-  .button {
-    width: 80%;
+    h2 {
+      font-size: 1.75rem;
+      color: #2A2F39;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    button {
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid #e5e5e5;
+      margin-left: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      background: var(--Primary_new, linear-gradient(113deg, #FF9337 0.65%, #FD4E4E 90.49%));
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+
+      &:hover {
+        filter: brightness(90%);
+        cursor: pointer;
+      }
+
+      &:active {
+        background: #E14908;
+        cursor: pointer;
+      }
+    }
+
+    input {
+      border-radius: 1rem;
+      padding: 0.25rem;
+    }
   }
 }
 </style>
